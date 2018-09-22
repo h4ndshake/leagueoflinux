@@ -10,7 +10,6 @@ function install_app() {
       env WINEARCH="${WINEARCH}" WINEPREFIX="${WINEPREFIX}" "${WINETRICKS}" --unattended ${TRICK}
     done
   fi
-  mkdir /run/user/`id -u`/snap."$SNAP_NAME" || true
 
 region=$(yad --width=250 --center --on-top --align=center --title="League of Linux" --form --separator=" " --item-separator="," \
 --field="Choose your region:":CB "BR,EUNE,EUW,JP,LA1,LA2,NA,OC1,RU,TR" --item-separator="," \
@@ -374,7 +373,7 @@ export XDG_CONFIG_HOME=$SNAP_USER_COMMON/.config
 mkdir -p $XDG_CONFIG_HOME
 
 # Create $XDG_RUNTIME_DIR if not exists (to be removed when LP: #1656340 is fixed)
-[ -n "$XDG_RUNTIME_DIR" ] && mkdir -p $XDG_RUNTIME_DIR -m 700
+mkdir -p $XDG_RUNTIME_DIR -m 700
 
 # Make PulseAudio socket available inside the snap-specific $XDG_RUNTIME_DIR
 if [ -n "$XDG_RUNTIME_DIR" ]; then
@@ -387,7 +386,7 @@ fi
 
 # Font Config and themes
 export FONTCONFIG_PATH=$SNAP/etc/fonts/conf.d
-#export FONTCONFIG_FILE=$XDG_CONFIG_HOME/fontconfig/fonts.conf
+export FONTCONFIG_FILE=$XDG_CONFIG_HOME/fontconfig/fonts.conf
 
 # Gdk-pixbuf loaders
 export GDK_PIXBUF_MODULE_FILE=$XDG_CACHE_HOME/gdk-pixbuf-loaders.cache
