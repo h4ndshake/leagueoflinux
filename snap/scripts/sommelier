@@ -10,6 +10,7 @@ function install_app() {
       env WINEARCH="${WINEARCH}" WINEPREFIX="${WINEPREFIX}" "${WINETRICKS}" --unattended ${TRICK}
     done
   fi
+  mkdir /run/user/`id -u`/snap."$SNAP_NAME" || true
 
 region=$(yad --width=250 --center --on-top --align=center --title="League of Linux" --form --separator=" " --item-separator="," \
 --field="Choose your region:":CB "BR,EUNE,EUW,JP,LA1,LA2,NA,OC1,RU,TR" --item-separator="," \
