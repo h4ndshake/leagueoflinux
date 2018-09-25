@@ -7,6 +7,8 @@
 <p align="center"><b>This snap install League of Legends</b></p>
 
 <p align="center">Published for <img src="http://anything.codes/slack-emoji-for-techies/emoji/tux.png" align="top" width="24" /> with :gift_heart:</p>
+<a href="https://build.snapcraft.io/user/Coffeeinator/leagueoflinux"><img src="https://build.snapcraft.io/badge/Coffeeinator/leagueoflinux.svg" alt="Snap Status"></a>
+
 
 ## Install
 
