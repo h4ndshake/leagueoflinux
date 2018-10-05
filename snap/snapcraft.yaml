@@ -16,7 +16,7 @@ apps:
     command: bin/sommelier "$WINEPREFIX/drive_c/Riot Games/League of Legends/LeagueClient.exe"
     environment:
       WINEPREFIX: "$SNAP_USER_COMMON/.wine"
-      TRICKS: "winxp vcrun2017 corefonts"
+      TRICKS: "winxp vcrun2017 corefonts d3dx9_36"
       INSTALL_URL_BR: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer BR.exe"
       INSTALL_URL_EUNE: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer EUNE.exe"
       INSTALL_URL_EUW: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer EUW.exe"
@@ -100,7 +100,7 @@ parts:
 
       ARCH="$(dpkg --print-architecture)"
       WINE_REL="wine-staging"
-      WINE_VER="3.16.0"
+      WINE_VER="3.15.0"
 
       # wget and dpkg extract the wine debs
       ## supporting binaries which are arch-specific but the same filenames in both architectures so we only install the native architecture
