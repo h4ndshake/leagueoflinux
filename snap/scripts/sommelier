@@ -321,6 +321,10 @@ if [ "$SNAP_ARCH" = "amd64" ]; then
   append_dir LD_LIBRARY_PATH $SNAP/usr/lib/i386-linux-gnu
 fi
 
+# PBA knobs and switches
+export __PBA_CB_HEAP=64
+export __PBA_GEO_HEAP=256
+
 # XKB config
 export XKB_CONFIG_ROOT=$SNAP/usr/share/X11/xkb
 
