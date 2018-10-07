@@ -1,6 +1,6 @@
 name: leagueoflinux
 version: 'latest'
-summary: League of Legends on Linux (WINE)
+summary: League of Legends on Linux (WINE, with PBA patches, knobs and switches)
 description: |
   League of Legends is a fast-paced, competitive online game that blends the speed and intensity of an RTS with RPG elements. Two teams of powerful champions, each with a unique design and playstyle, battle head-to-head across multiple battlefields and game modes. With an ever-expanding roster of champions, frequent updates and a thriving tournament scene, League of Legends offers endless replayability for players of every skill level.
 
@@ -99,19 +99,21 @@ parts:
       snapcraftctl build
 
       ARCH="$(dpkg --print-architecture)"
-      WINE_REL="wine-staging"
+      WINE_REL="wine-staging-pba"
       WINE_VER="3.15.0"
+      WINE_REV="1"
+      FR_COMMIT_ID="839bfa6af97794cac29cccdba3311dff5eca769b"
 
       # wget and dpkg extract the wine debs
       ## supporting binaries which are arch-specific but the same filenames in both architectures so we only install the native architecture
-      DEB_URLS="https://dl.winehq.org/wine-builds/ubuntu/pool/main/${WINE_REL}_${WINE_VER}~xenial_${ARCH}.deb"
+      DEB_URLS="https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}_${WINE_VER}-${WINE_REV}_${ARCH}.deb"
 
       ## wine loaders - this one is the native system architecture
-      DEB_URLS="$DEB_URLS https://dl.winehq.org/wine-builds/ubuntu/pool/main/${WINE_REL}-${ARCH}_${WINE_VER}~xenial_${ARCH}.deb"
+      DEB_URLS="$DEB_URLS https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}-${ARCH}_${WINE_VER}-${WINE_REV}_${ARCH}.deb"
 
       if [ "$ARCH" = "amd64" ]; then
         ## on amd64 builds we need to also bundle the i386 wine loaders
-        DEB_URLS="$DEB_URLS https://dl.winehq.org/wine-builds/ubuntu/pool/main/${WINE_REL}-i386_${WINE_VER}~xenial_i386.deb"
+        DEB_URLS="$DEB_URLS https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}-i386_${WINE_VER}-${WINE_REV}_i386.deb"
       fi
 
       for DEB_URL in ${DEB_URLS}; do
