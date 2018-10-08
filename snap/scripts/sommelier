@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TITLE="League of Legends on Linux (WINE)"
-NOTICE="Home page of the project: https://github.com/Coffeeinator/leagueoflinux"
+TITLE="League of Legends on Linux (WINE, with PBA patches, knobs and switches)"
+NOTICE="Home page of the project: https://github.com/h4ndshake/leagueoflinux"
 
 function install_app() {
   # Install additional requirements via winetricks here
@@ -296,12 +296,6 @@ if [ "$SNAP_ARCH" = "amd64" ]; then
   export WINELOADER=$SNAP/bin/wine64
   export WINEDLLPATH=$SNAP/lib64/wine/fakedlls
   export ARCH="x86_64-linux-gnu"
-elif [ "$SNAP_ARCH" = "i386" ]; then
-  export WINEARCH=win32
-  export WINE=wine
-  export WINELOADER=$SNAP/bin/wine
-  export WINEDLLPATH=$SNAP/lib/wine/fakedlls
-  export ARCH="i386-linux-gnu"
 else
   echo "Host architecture ($SNAP_ARCH) unsupported."
   exit 1
@@ -313,7 +307,7 @@ export WINETRICKS=$SNAP/bin/winetricks
 export winepath=$SNAP/bin/winepath
 export WINEPREFIX="$SNAP_USER_COMMON/.wine"
 
-#export WINEDEBUG=-all
+export WINEDEBUG=-all
 export LD_LIBRARY_PATH="$SNAP/lib/$ARCH:$SNAP/lib:$SNAP/usr/lib/$ARCH:$SNAP/usr/lib"
 if [ "$SNAP_ARCH" = "amd64" ]; then
   append_dir LD_LIBRARY_PATH $SNAP/lib64
@@ -324,6 +318,9 @@ fi
 # PBA knobs and switches
 export __PBA_CB_HEAP=64
 export __PBA_GEO_HEAP=256
+
+# Enables Esync
+export WINEESYNC=1
 
 # XKB config
 export XKB_CONFIG_ROOT=$SNAP/usr/share/X11/xkb

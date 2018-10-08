@@ -9,14 +9,13 @@ confinement: devmode
 
 architectures:
   - build-on: amd64
-  - build-on: i386
 
 apps:
   leagueoflinux:
     command: bin/sommelier "$WINEPREFIX/drive_c/Riot Games/League of Legends/LeagueClient.exe"
     environment:
       WINEPREFIX: "$SNAP_USER_COMMON/.wine"
-      TRICKS: "winxp vcrun2017 corefonts d3dx9_36"
+      TRICKS: "corefonts d3dx9_36 fontsmooth=rgb vcrun2017 winxp"
       INSTALL_URL_BR: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer BR.exe"
       INSTALL_URL_EUNE: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer EUNE.exe"
       INSTALL_URL_EUW: "https://riotgamespatcher-a.akamaihd.net/releases/live/installer/deploy/League of Legends installer EUW.exe"
@@ -91,47 +90,31 @@ parts:
     build-attributes:
       - no-system-libraries
     build-packages:
-      - dpkg
       - wget
     override-pull: |
       true
     override-build: |
       snapcraftctl build
 
-      ARCH="$(dpkg --print-architecture)"
-      WINE_REL="wine-staging-pba"
-      WINE_VER="3.15.0"
-      WINE_REV="1"
-      FR_COMMIT_ID="839bfa6af97794cac29cccdba3311dff5eca769b"
+      WINE_REL="wine-esync"
+      WINE_VER="3.15"
 
-      # wget and dpkg extract the wine debs
-      ## supporting binaries which are arch-specific but the same filenames in both architectures so we only install the native architecture
-      DEB_URLS="https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}_${WINE_VER}-${WINE_REV}_${ARCH}.deb"
+      # Download and extract wine from Lutris's archive.
+      WINE_URL="https://lutris.net/files/runners/${WINE_REL}-${WINE_VER}-x86_64.tar.gz"
+      WINE_FILENAME="$(basename "${WINE_URL}")"
 
-      ## wine loaders - this one is the native system architecture
-      DEB_URLS="$DEB_URLS https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}-${ARCH}_${WINE_VER}-${WINE_REV}_${ARCH}.deb"
+      echo "Downloading ${WINE_FILENAME}..."
+      wget --quiet "${WINE_URL}" -O "${SNAPCRAFT_PART_INSTALL}/${WINE_FILENAME}"
+      
+      echo "Unpacking ${WINE_FILENAME}..."
+      tar -xzf "${SNAPCRAFT_PART_INSTALL}/${WINE_FILENAME}" -C ${SNAPCRAFT_PART_INSTALL}
+      rm -f "${SNAPCRAFT_PART_INSTALL}/${WINE_FILENAME}"
 
-      if [ "$ARCH" = "amd64" ]; then
-        ## on amd64 builds we need to also bundle the i386 wine loaders
-        DEB_URLS="$DEB_URLS https://raw.githubusercontent.com/Firerat/FR-wine-pba-debs/${FR_COMMIT_ID}/apt-repo/pool/contrib/w/${WINE_REL}/${WINE_REL}-i386_${WINE_VER}-${WINE_REV}_i386.deb"
-      fi
-
-      for DEB_URL in ${DEB_URLS}; do
-        DEB=$(basename "${DEB_URL}")
-        echo "Downloading ${DEB_URL}..."
-        wget --quiet "${DEB_URL}" -O "${SNAPCRAFT_PART_INSTALL}/${DEB}"
-        echo "Unpacking ${DEB}..."
-        dpkg -x "${SNAPCRAFT_PART_INSTALL}/${DEB}" ${SNAPCRAFT_PART_INSTALL}
-        rm -f "${SNAPCRAFT_PART_INSTALL}/${DEB}"
-      done
-
-      # Organise and cleanup
-      cp -a ${SNAPCRAFT_PART_INSTALL}/opt/${WINE_REL}/* ${SNAPCRAFT_PART_INSTALL}/
-      rm -rf ${SNAPCRAFT_PART_INSTALL}/opt
+      # Organization and cleanup
+      cp -a ${SNAPCRAFT_PART_INSTALL}/esync-${WINE_VER}-x86_64/* ${SNAPCRAFT_PART_INSTALL}/
+      rm -rf ${SNAPCRAFT_PART_INSTALL}/${WINE_REL}-${WINE_VER}-x86_64
       rm -rf ${SNAPCRAFT_PART_INSTALL}/share/applications
       rm -rf ${SNAPCRAFT_PART_INSTALL}/share/man
-      rm -rf ${SNAPCRAFT_PART_INSTALL}/usr/share/doc
-      rm -rf ${SNAPCRAFT_PART_INSTALL}/usr/share/lintian
     after:
       - enable-i386
 
